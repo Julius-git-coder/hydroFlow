@@ -32,9 +32,9 @@ const ShareTab = () => {
       : "No achievements unlocked today — but I'm staying consistent!",
     "",
     "Stay hydrated, friends! 💧",
-    "Track your water intake too at https://aqua-track-app.netlify.app/",
+    "Track your water intake too at https://genuine-cannoli-1e18cf.netlify.app/",
   ].join("\n");
-// will change the deployment
+  // will change the deployment
   const handleCopy = () => {
     navigator.clipboard.writeText(shareText).then(() => {
       setCopied(true);

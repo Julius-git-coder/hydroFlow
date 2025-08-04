@@ -1,6 +1,6 @@
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { IconButton, Modal, useTheme } from "@mui/material";
-import Logo from "/public/Logo.jpeg";
+import Logo from "/Logo.jpeg";
 import { useState } from "react";
 import Settings from "./Settings";
 

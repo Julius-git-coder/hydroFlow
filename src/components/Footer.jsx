@@ -14,7 +14,7 @@ const Footer = () => {
         Built with ❤️ by{" "}
         <Box
           component="a"
-          href=""
+          href="https://gist.github.com/Julius-git-coder/1a09471ead69aa4c8f7f281839fc8a85"
           target="_blank"
           rel="noopener noreferrer"
           sx={{
@@ -23,7 +23,7 @@ const Footer = () => {
             fontWeight: "bold",
           }}
         >
-        Julius
+          Julius
         </Box>
       </Typography>
     </Box>

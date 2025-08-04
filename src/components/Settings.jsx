@@ -65,8 +65,8 @@ const Settings = ({ handleClose }) => {
         setHydrationData(imported);
         alert("Import successful!");
         handleClose();
-      } catch (err) {
-        alert("Import failed: Invalid JSON structure.");
+      } catch (error) {
+        alert("Import failed: Invalid JSON structure.",error);
       }
     };
 
