@@ -205,7 +205,7 @@ const Login = ({ onLogin }) => {
   }, [loginStatus]);
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center p-4 gap-5  md:bg-blue-950  text-white overflow-hidden  ">
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 gap-5  md:bg-black text-white overflow-hidden  ">
       <img
         src="/Logo.jpeg"
         className="absolute h-full w-full object-cover md:hidden block z-[-1] "
