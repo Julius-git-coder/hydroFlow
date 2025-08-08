@@ -10,7 +10,7 @@ const Navbar = () => {
   const handleCloseSettings = () => setOpenSettings(false);
 
   const theme = useTheme();
-
+  const isDarkMode = theme.palette.mode === "dark";
   return (
     <>
       <nav
@@ -20,15 +20,27 @@ const Navbar = () => {
           padding: "0.6dvh",
         }}
       >
-        <img
-          src={Logo}
-          alt="Logo"
-          style={{ height: "3rem", borderRadius: "50%", marginLeft: "12px" }}
-        />
-
+        <span className="text-xs">
+          <h1
+            className={` text-xs  md:block xl:left-[11.9rem] md:text-center ${
+              isDarkMode ? "text-white" : " text-blue-950"
+            }`}
+          >
+            <img
+              className="md:pr-5 p-0  absolute"
+              src={Logo}
+              alt="Logo"
+              style={{
+                height: "3rem",
+                borderRadius: "50%",
+                marginLeft: "12px",
+              }}
+            />
+            H<span className="md:pl-6 pl-7">droFlow</span>
+          </h1>
+        </span>
         <IconButton
           sx={{
-          
             padding: "0",
             marginRight: "12px", // add marginRight to push settings icon
             "&:focus": {
