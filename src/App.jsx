@@ -168,7 +168,7 @@ function App() {
           navigator.vibrate([2000]);
         }
       }
-    }, 300000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [isMuted, userInteracted]);
