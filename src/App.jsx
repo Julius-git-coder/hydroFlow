@@ -76,7 +76,7 @@ function App() {
   if (initializing) {
     return (
       <div className="flex items-center justify-center h-screen">
-        Loading...
+      <img src="/Logo.jpeg " className="h-20 w-20 rounded-full animate-bounce md:h-30 md:w-30"/>
       </div>
     );
   }
