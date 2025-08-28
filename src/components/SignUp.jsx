@@ -3,11 +3,9 @@ import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../Store/useAuthStore";
 
-
-const Signup = ({ onSignup }) => {
-  // ✅ accept onSignup from App
+const Signup = () => {
   const navigate = useNavigate();
-  const { register, error, isLoading } = useAuthStore();
+  const { register, error, isLoading, loginWithGoogle } = useAuthStore(); // ✅ added loginWithGoogle
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -34,13 +32,11 @@ const Signup = ({ onSignup }) => {
     }
 
     await register(formData.email, formData.password, formData.name);
-
-    if (onSignup) onSignup(); // ✅ update App loggedIn
-    navigate("/"); // ✅ redirect to dashboard
+    navigate("/"); // ✅ redirect after signup
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-[19rem] md:max-w-[30rem]">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
         <form onSubmit={handleSubmit} className="space-y-4 ">
@@ -110,6 +106,24 @@ const Signup = ({ onSignup }) => {
           >
             {isLoading ? "Creating..." : "Create Account"}
           </button>
+
+          {/* ✅ Google Sign Up Button */}
+          <button
+            type="button"
+            onClick={async () => {
+              await loginWithGoogle();
+              navigate("/"); // redirect after Google signup
+            }}
+            className="w-full flex items-center justify-center gap-2   py-2 rounded-lg hover:bg-gray-300 bg-white mt-3"
+          >
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              alt="Google"
+              className="w-5 h-5"
+            />
+            Continue with Google
+          </button>
+
           {error && <p className="text-red-500 text-sm mt-2 ">{error}</p>}
         </form>
         <p className="text-sm text-center mt-4">

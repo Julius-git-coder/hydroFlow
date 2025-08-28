@@ -9,13 +9,20 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import useAuthStore from "../Store/useAuthStore";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
   const { isMuted } = useAppContext();
   const [userInteracted, setUserInteracted] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { isAuthenticated, initialize, initializing } = useAuthStore();
+
+  // 🔑 Initialize auth listener
+  useEffect(() => {
+    const unsubscribe = initialize();
+    return () => unsubscribe();
+  }, [initialize]);
 
   useEffect(() => {
     const handleInteraction = () => setUserInteracted(true);
@@ -65,6 +72,15 @@ function App() {
     return () => clearInterval(interval);
   }, [isMuted, userInteracted]);
 
+  // 🕑 Show nothing while Firebase is checking auth
+  if (initializing) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <Box
       sx={{
@@ -77,7 +93,7 @@ function App() {
         <Route
           path="/"
           element={
-            loggedIn ? (
+            isAuthenticated ? (
               <>
                 <Box
                   sx={{
@@ -105,18 +121,12 @@ function App() {
                 <Footer />
               </>
             ) : (
-              <Navigate to="/login" />
+              <Navigate to="/login" replace />
             )
           }
         />
-        <Route
-          path="/login"
-          element={<Login onLogin={() => setLoggedIn(true)} />}
-        />
-        <Route
-          path="/signup"
-          element={<Signup onSignup={() => setLoggedIn(true)} />}
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Box>
   );

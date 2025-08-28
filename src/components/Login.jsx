@@ -3,8 +3,7 @@ import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../Store/useAuthStore";
 
-const Login = ({ onLogin }) => {
-  // ✅ accept onLogin prop
+const Login = () => {
   const navigate = useNavigate();
   const { login, error, isLoading } = useAuthStore();
 
@@ -17,13 +16,11 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(formData.email, formData.password);
-
-    if (onLogin) onLogin(); // ✅ update App loggedIn
-    navigate("/"); // ✅ redirect to dashboard
+    navigate("/"); // ✅ redirect after login
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center text-black h-screen bg-gray-100">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-[19rem] md:max-w-[30rem]">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
         <form onSubmit={handleSubmit} className="space-y-4 ">

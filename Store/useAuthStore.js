@@ -1,11 +1,15 @@
 import { create } from "zustand";
-import { auth } from "../service/firebaseConfig"; // ✅ fixed path
+import { auth } from "../service/firebaseConfig"; // ✅ make sure the path is correct
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 
 // 🔹 Map Firebase Auth errors to friendly messages
@@ -21,6 +25,10 @@ const mapAuthError = (error) => {
       return "This email is already registered. Please sign in.";
     case "auth/weak-password":
       return "Password is too weak. Use at least 6 characters.";
+    case "auth/popup-closed-by-user":
+      return "Google sign-in was canceled. Please try again.";
+    case "auth/popup-blocked":
+      return "Popup was blocked by your browser. Allow popups and try again.";
     default:
       return "Something went wrong. Please check your network and try again.";
   }
@@ -41,6 +49,7 @@ const useAuthStore = create((set) => ({
           id: user.uid,
           email: user.email,
           name: user.displayName || user.email?.split("@")[0],
+          photoURL: user.photoURL || null,
           emailVerified: user.emailVerified,
           createdAt: user.metadata.creationTime,
         };
@@ -82,7 +91,7 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // 🔑 Login
+  // 🔑 Login with email/password
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -93,9 +102,23 @@ const useAuthStore = create((set) => ({
     }
   },
 
+  // 🔑 Google Sign In / Sign Up (Popup + Persistence)
+  loginWithGoogle: async () => {
+    set({ isLoading: true, error: null });
+    const provider = new GoogleAuthProvider();
+    try {
+      await setPersistence(auth, browserLocalPersistence); // ✅ store in localStorage
+      await signInWithPopup(auth, provider);
+      set({ isLoading: false });
+    } catch (error) {
+      set({ error: mapAuthError(error), isLoading: false });
+    }
+  },
+
   // 🔑 Logout
   logout: async () => {
     await signOut(auth);
+    set({ user: null, isAuthenticated: false });
   },
 }));
 

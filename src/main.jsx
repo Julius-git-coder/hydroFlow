@@ -49,8 +49,6 @@ const ThemeWrapper = () => {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      {" "}
-      {/* ✅ wrap here */}
       <AppProvider>
         <ThemeWrapper />
       </AppProvider>
