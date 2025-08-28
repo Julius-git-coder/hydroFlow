@@ -170,7 +170,7 @@ const AboutItems = () => {
             <img
               src="/Mee.jpg"
               alt="Profile"
-              className="w-20 h-20 rounded-full mx-auto mt-5"
+              className="w-20 h-20 rounded-full mx-auto mt-5 object-cover"
             />
 
             <span className="inline-block h-1 w-10 rounded bg-indigo-600 mt-8 mb-6"></span>
