@@ -4,7 +4,6 @@ import React from "react";
 const AboutItems = () => {
   return (
     <div className="border border-gray-200 h-full p-1 overflow-auto bg-[url('/water.jpeg')] bg-cover bg-center text-wite ">
-      {/* AboutItemsC */}
       {/* <AboutItemsC/> */}
       <section className="text-white body-font ">
         <div className="container px-5 py-24 mx-auto  ">
