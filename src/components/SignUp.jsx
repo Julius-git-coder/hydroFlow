@@ -136,7 +136,7 @@ const Signup = () => {
               {error}{" "}
               <img
                 src="/eror.jpeg"
-                className="h-4 w-4 mt-6 relative left-[-5rem] animate-pulse"
+                className="h-4 w-4 mt-6 relative left-[-12rem] animate-pulse"
               />
             </p>
           )}
