@@ -34,7 +34,7 @@ const About = ({ showButton }) => {
           <div
             className={`text-xs relative ml-[9rem] md:ml-[85rem] transform transition-all duration-500 ${
               log
-                ? "translate-y-1 mb-1 opacity-100"
+                ? "translate-y-1 mb-1 opacity-100 text-xs text-black"
                 : "-translate-y-4 opacity-0"
             }`}
           >
