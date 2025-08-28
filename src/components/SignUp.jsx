@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion"; // ✅ import animation
 import useAuthStore from "../../Store/useAuthStore";
 
 const Signup = () => {
@@ -37,7 +38,13 @@ const Signup = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-[19rem] md:max-w-[30rem]">
+      {/* ✅ Animate X-axis entry */}
+      <motion.div
+        initial={{ x: "-100vw", opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-[19rem] md:max-w-[30rem]"
+      >
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
         <form onSubmit={handleSubmit} className="space-y-4 ">
           <div className="relative">
@@ -114,7 +121,7 @@ const Signup = () => {
               await loginWithGoogle();
               navigate("/"); // redirect after Google signup
             }}
-            className="w-full flex items-center justify-center gap-2   py-2 rounded-lg hover:bg-gray-300 bg-white mt-3"
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg hover:bg-gray-300 bg-white mt-3"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -126,7 +133,11 @@ const Signup = () => {
 
           {error && (
             <p className="text-red-500 text-xs mt-2 flex">
-              {error} <img src="/eror.jpeg" className="h-4 w-4 mt-6 relative left-[-5rem] animate-pulse" />
+              {error}{" "}
+              <img
+                src="/eror.jpeg"
+                className="h-4 w-4 mt-6 relative left-[-5rem] animate-pulse"
+              />
             </p>
           )}
         </form>
@@ -139,7 +150,7 @@ const Signup = () => {
             Sign in
           </button>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };
