@@ -1,9 +1,12 @@
 import { Box, Divider, Typography } from "@mui/material";
 
+
 const Footer = () => {
   return (
+    
     <Box sx={{ mt: 4, textAlign: "center" }}>
       <Divider />
+
       <Typography
         variant="caption"
         sx={{
@@ -11,6 +14,7 @@ const Footer = () => {
           fontSize: { xs: "0.65rem", sm: "0.75rem" },
         }}
       >
+      
         Built with ❤️ by{" "}
         <Box
           component="a"
