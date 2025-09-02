@@ -1,5 +1,3 @@
-
-
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { parseISO, differenceInCalendarDays, isSameDay } from "date-fns";
 import BoltIcon from "@mui/icons-material/Bolt";
@@ -8,31 +6,46 @@ import SunnyIcon from "@mui/icons-material/Sunny";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import OpacityIcon from "@mui/icons-material/Opacity";
 
+import { auth } from "../../Service/firebaseConfig";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  writeBatch,
+  doc,
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+
 const AppContext = createContext();
+const db = getFirestore();
 
 export const AppProvider = ({ children }) => {
   const [baseGoal, setBaseGoal] = useState("2000");
+
+  // We'll keep local state for fast UI and sync it with Firestore.
   const [hydrationData, setHydrationData] = useState(() => {
     const stored = localStorage.getItem("aquatrack_history");
     return stored ? JSON.parse(stored) : [];
   });
+
   const [weatherAdjustment, setWeatherAdjustment] = useState(0);
 
   const [darkMode, setDarkMode] = useState(() => {
     const stored = localStorage.getItem("aquatrack_dark_mode");
     return stored === "true";
   });
-
   useEffect(() => {
     localStorage.setItem("aquatrack_dark_mode", darkMode);
   }, [darkMode]);
 
-  // ✅ Fix: Notification mute state added here
   const [isMuted, setIsMuted] = useState(() => {
     const stored = localStorage.getItem("aquatrack_mute");
     return stored === "true";
   });
-
   const toggleMute = () => {
     setIsMuted((prev) => {
       const updated = !prev;
@@ -41,67 +54,121 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-  // Persist hydrationData to localStorage
+  // Persist local cache
   useEffect(() => {
     localStorage.setItem("aquatrack_history", JSON.stringify(hydrationData));
   }, [hydrationData]);
 
-  const addLog = (amount, type) => {
-    const today = new Date().toISOString().split("T")[0]; // e.g., "2025-06-03"
+  // Load hydration logs from Firestore on auth change
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setHydrationData([]);
+        return;
+      }
+
+      const q = query(
+        collection(db, "users", user.uid, "intakes"),
+        orderBy("timestamp", "asc")
+      );
+      const snapshot = await getDocs(q);
+
+      const logs = snapshot.docs.map((d) => d.data());
+
+      // group logs by date into { date, totalIntake, logs[] }
+      const grouped = logs.reduce((acc, log) => {
+        const date = log.date; // stored as "YYYY-MM-DD"
+        if (!acc[date]) acc[date] = { date, totalIntake: 0, logs: [] };
+        acc[date].totalIntake += Number(log.amount || 0);
+        acc[date].logs.push(log);
+        return acc;
+      }, {});
+      setHydrationData(Object.values(grouped));
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // Add intake: write to Firestore, then update local state
+  const addLog = async (amount, type) => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+
+    const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
     const time = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
     });
 
+    const newLog = {
+      amount: Number(amount),
+      type,
+      time,
+      date: today,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      await addDoc(collection(db, "users", uid, "intakes"), newLog);
+    } catch (e) {
+      console.error("Error saving intake:", e);
+    }
+
+    // Optimistic UI update
     setHydrationData((prev) => {
       const existingDay = prev.find((entry) => entry.date === today);
-
       if (existingDay) {
         return prev.map((entry) =>
           entry.date === today
             ? {
                 ...entry,
-                totalIntake: entry.totalIntake + amount,
-                logs: [...entry.logs, { amount, type, time, date: today }],
+                totalIntake: Number(entry.totalIntake) + Number(amount),
+                logs: [...entry.logs, newLog],
               }
             : entry
         );
-      } else {
-        return [
-          ...prev,
-          {
-            date: today,
-            totalIntake: amount,
-            logs: [{ amount, type, time, date: today }],
-          },
-        ];
       }
+      return [
+        ...prev,
+        { date: today, totalIntake: Number(amount), logs: [newLog] },
+      ];
     });
   };
 
-  const resetToday = () => {
+  // ✅ Reset only today's logs (and remove today's entry from state entirely)
+  const resetToday = async () => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
     const today = new Date().toISOString().split("T")[0];
 
-    setHydrationData((prev) =>
-      prev.map((entry) => {
-        if (entry.date !== today) return entry;
-
-        // Destructure to exclude caffeine-related fields
-        const { caffeineLogs, caffeineIntake, caffeineOffset, ...rest } = entry;
-
-        return {
-          ...rest,
-          logs: [],
-          totalIntake: 0,
-        };
-      })
+    // delete today's docs in Firestore
+    const q = query(
+      collection(db, "users", uid, "intakes"),
+      where("date", "==", today)
     );
+    const snap = await getDocs(q);
+    const batch = writeBatch(db);
+    snap.forEach((d) => batch.delete(doc(db, "users", uid, "intakes", d.id)));
+    await batch.commit();
+
+    // remove today's entry from local state
+    setHydrationData((prev) => prev.filter((entry) => entry.date !== today));
   };
 
-  const resetLogs = () => {
+  // ✅ Reset all logs
+  const resetLogs = async () => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+
+    const snap = await getDocs(collection(db, "users", uid, "intakes"));
+    const batch = writeBatch(db);
+    snap.forEach((d) => batch.delete(doc(db, "users", uid, "intakes", d.id)));
+    await batch.commit();
+
     setHydrationData([]);
   };
 
+  // Achievements
   const achievements = useMemo(() => {
     const today = new Date();
     const sortedData = [...hydrationData].sort(
@@ -201,7 +268,7 @@ export const AppProvider = ({ children }) => {
         darkMode,
         setDarkMode,
         isMuted,
-        toggleMute, // ✅ Added to context
+        toggleMute,
       }}
     >
       {children}

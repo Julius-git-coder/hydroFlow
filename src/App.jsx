@@ -18,7 +18,7 @@ function App() {
   const [userInteracted, setUserInteracted] = useState(false);
   const { isAuthenticated, initialize, initializing } = useAuthStore();
 
-  // 🔑 Initialize auth listener
+  //  Initialize auth listener
   useEffect(() => {
     const unsubscribe = initialize();
     return () => unsubscribe();
@@ -67,12 +67,12 @@ function App() {
           navigator.vibrate([2000]);
         }
       }
-    }, 30000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [isMuted, userInteracted]);
 
-  // 🕑 Show nothing while Firebase is checking auth
+  //  Show nothing while Firebase is checking auth
   if (initializing) {
     return (
       <div className="flex items-center justify-center h-screen">
