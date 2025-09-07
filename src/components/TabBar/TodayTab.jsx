@@ -1,4 +1,11 @@
-import { Box, Typography, Paper, List, useTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  List,
+  useTheme,
+  IconButton,
+} from "@mui/material";
 import { useAppContext } from "../../context/AppContext";
 import { isToday, parseISO } from "date-fns";
 import { PieChart, Pie, Cell, ResponsiveContainer, Label } from "recharts";
@@ -9,6 +16,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import OpacityIcon from "@mui/icons-material/Opacity";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import WineBarIcon from "@mui/icons-material/WineBar";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const getIntakeIcon = (type) => {
   switch (type) {
@@ -32,7 +40,7 @@ const getIntakeIcon = (type) => {
 const COLORS = ["#1976d2", "#e0e0e0"];
 
 const TodayTab = () => {
-  const { hydrationData, baseGoal } = useAppContext();
+  const { hydrationData, baseGoal, deleteLog } = useAppContext();
   const theme = useTheme();
 
   const todayLogs =
@@ -134,15 +142,25 @@ const TodayTab = () => {
                 <Box display="flex" alignItems="center" gap={1}>
                   {getIntakeIcon(log.type)}
                   <Box>
-                    <Typography fontWeight="case">{log.amount}ml</Typography>
+                    <Typography fontWeight="bold">{log.amount}ml</Typography>
                     <Typography variant="caption" color="text.secondary">
                       {log.time}
                     </Typography>
                   </Box>
                 </Box>
-                <Typography variant="caption" fontWeight="bold">
-                  +{Math.round((log.amount / baseGoal) * 100)}%
-                </Typography>
+
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography variant="caption" fontWeight="bold">
+                    +{Math.round((log.amount / baseGoal) * 100)}%
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => deleteLog(log.timestamp)}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Box>
               </Paper>
             ))}
           </List>

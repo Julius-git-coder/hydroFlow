@@ -26,7 +26,6 @@ const db = getFirestore();
 export const AppProvider = ({ children }) => {
   const [baseGoal, setBaseGoal] = useState("2000");
 
-  // We'll keep local state for fast UI and sync it with Firestore.
   const [hydrationData, setHydrationData] = useState(() => {
     const stored = localStorage.getItem("aquatrack_history");
     return stored ? JSON.parse(stored) : [];
@@ -75,9 +74,8 @@ export const AppProvider = ({ children }) => {
 
       const logs = snapshot.docs.map((d) => d.data());
 
-      // group logs by date into { date, totalIntake, logs[] }
       const grouped = logs.reduce((acc, log) => {
-        const date = log.date; // stored as "YYYY-MM-DD"
+        const date = log.date;
         if (!acc[date]) acc[date] = { date, totalIntake: 0, logs: [] };
         acc[date].totalIntake += Number(log.amount || 0);
         acc[date].logs.push(log);
@@ -89,12 +87,12 @@ export const AppProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  // Add intake: write to Firestore, then update local state
+  // Add intake log
   const addLog = async (amount, type) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
 
-    const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
+    const today = new Date().toISOString().split("T")[0];
     const time = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
@@ -114,7 +112,6 @@ export const AppProvider = ({ children }) => {
       console.error("Error saving intake:", e);
     }
 
-    // Optimistic UI update
     setHydrationData((prev) => {
       const existingDay = prev.find((entry) => entry.date === today);
       if (existingDay) {
@@ -135,13 +132,43 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-  // ✅ Reset only today's logs (and remove today's entry from state entirely)
+  // ✅ Delete a single log
+  const deleteLog = async (timestamp) => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+
+    const q = query(
+      collection(db, "users", uid, "intakes"),
+      where("timestamp", "==", timestamp)
+    );
+    const snap = await getDocs(q);
+
+    const batch = writeBatch(db);
+    snap.forEach((d) => batch.delete(doc(db, "users", uid, "intakes", d.id)));
+    await batch.commit();
+
+    setHydrationData((prev) =>
+      prev
+        .map((entry) => {
+          const newLogs = entry.logs.filter(
+            (log) => log.timestamp !== timestamp
+          );
+          return {
+            ...entry,
+            logs: newLogs,
+            totalIntake: newLogs.reduce((sum, l) => sum + l.amount, 0),
+          };
+        })
+        .filter((entry) => entry.logs.length > 0)
+    );
+  };
+
+  // ✅ Reset today’s logs
   const resetToday = async () => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const today = new Date().toISOString().split("T")[0];
 
-    // delete today's docs in Firestore
     const q = query(
       collection(db, "users", uid, "intakes"),
       where("date", "==", today)
@@ -151,7 +178,6 @@ export const AppProvider = ({ children }) => {
     snap.forEach((d) => batch.delete(doc(db, "users", uid, "intakes", d.id)));
     await batch.commit();
 
-    // remove today's entry from local state
     setHydrationData((prev) => prev.filter((entry) => entry.date !== today));
   };
 
@@ -260,6 +286,7 @@ export const AppProvider = ({ children }) => {
         hydrationData,
         setHydrationData,
         addLog,
+        deleteLog, // ✅ exposed
         resetToday,
         resetLogs,
         achievements,
