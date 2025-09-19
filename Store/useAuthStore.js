@@ -1,3 +1,4 @@
+// useAuthStore.js
 import { create } from "zustand";
 import { auth } from "../service/firebaseConfig"; // ✅ make sure the path is correct
 import {

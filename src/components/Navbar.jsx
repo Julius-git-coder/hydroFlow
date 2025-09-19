@@ -20,7 +20,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="shadow-lg"
+      
         style={{
           display: "flex",
           justifyContent: "space-between",
