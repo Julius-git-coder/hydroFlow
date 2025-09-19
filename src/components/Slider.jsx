@@ -1,7 +1,9 @@
-// Slider.js
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext"; // Adjust the import path as needed
+import useAuthStore from "../../Store/useAuthStore"; // Adjust the import path as needed
+
 const Slider = () => {
   const [step, setStep] = useState(1);
   const [selections, setSelections] = useState({
@@ -11,7 +13,22 @@ const Slider = () => {
   });
   const [currentIndex, setCurrentIndex] = useState(0);
   const { setBaseGoal } = useAppContext();
+  const { user, isAuthenticated } = useAuthStore(); // Get user and auth state
   const navigate = useNavigate();
+
+  // Track if user has ever logged in using localStorage
+  const [isOldUser, setIsOldUser] = useState(() => {
+    return localStorage.getItem("hasLoggedIn") === "true";
+  });
+
+  // Update localStorage when user logs in
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      localStorage.setItem("hasLoggedIn", "true");
+      setIsOldUser(true);
+    }
+  }, [isAuthenticated, user]);
+
   const categories = [
     {
       label: "Adult Man",
@@ -388,7 +405,12 @@ const Slider = () => {
       <div className="text-center mt-4">
         <button
           onClick={() => navigate("/login")}
-          className="bg-blue-400 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-all duration-1000 scale-100 focus:outline-none"
+          className={`px-6 py-2 rounded-lg transition-all duration-1000 scale-100 focus:outline-none ${
+            isOldUser
+              ? "bg-blue-400 text-white hover:bg-blue-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+          disabled={!isOldUser}
         >
           Old User
         </button>
@@ -556,4 +578,5 @@ const Slider = () => {
     </div>
   );
 };
+
 export default Slider;

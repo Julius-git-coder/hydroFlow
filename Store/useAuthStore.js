@@ -1,4 +1,4 @@
-// useAuthStore.js
+
 import { create } from "zustand";
 import { auth } from "../service/firebaseConfig"; // ✅ make sure the path is correct
 import {
@@ -60,6 +60,8 @@ const useAuthStore = create((set) => ({
           isAuthenticated: true,
           initializing: false,
         });
+        // Set hasLoggedIn flag in localStorage
+        localStorage.setItem("hasLoggedIn", "true");
       } else {
         set({
           user: null,
@@ -86,6 +88,7 @@ const useAuthStore = create((set) => ({
         await updateProfile(user, { displayName: name });
       }
 
+      localStorage.setItem("hasLoggedIn", "true"); // Set hasLoggedIn on successful registration
       set({ isLoading: false });
     } catch (error) {
       set({ error: mapAuthError(error), isLoading: false });
@@ -97,6 +100,7 @@ const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      localStorage.setItem("hasLoggedIn", "true"); // Set hasLoggedIn on successful login
       set({ isLoading: false });
     } catch (error) {
       set({ error: mapAuthError(error), isLoading: false });
@@ -110,6 +114,7 @@ const useAuthStore = create((set) => ({
     try {
       await setPersistence(auth, browserLocalPersistence); // ✅ store in localStorage
       await signInWithPopup(auth, provider);
+      localStorage.setItem("hasLoggedIn", "true"); // Set hasLoggedIn on successful Google login
       set({ isLoading: false });
     } catch (error) {
       set({ error: mapAuthError(error), isLoading: false });
@@ -120,6 +125,7 @@ const useAuthStore = create((set) => ({
   logout: async () => {
     await signOut(auth);
     set({ user: null, isAuthenticated: false });
+    // Note: hasLoggedIn in localStorage persists to keep Old User button enabled
   },
 }));
 
