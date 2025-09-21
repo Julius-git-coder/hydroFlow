@@ -556,7 +556,7 @@ const Slider = () => {
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={`w-1 h-1 lg:w-4 lg:h-4 rounded-full ${
-                    currentIndex === index ? "bg-blue-400" : "bg-blue-100"
+                    currentIndex === index ? "bg-blue-400" : "bg-gray-200"
                   } focus:outline-none`}
                 ></button>
               ))}

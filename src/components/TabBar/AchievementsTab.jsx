@@ -13,7 +13,7 @@ const AchievementsTab = () => {
   const totalWater = sortedData.reduce((sum, day) => sum + day.totalIntake, 0);
   const daysTracked = sortedData.length;
 
-  // ✅ Tracked streak (3 consecutive days of logging, regardless of goal met)
+  //  Tracked streak (3 consecutive days of logging, regardless of goal met)
   let trackedStreak = 1;
   let maxTrackedStreak = 1;
 

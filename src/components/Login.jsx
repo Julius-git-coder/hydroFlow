@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // ✅ import animation
+import { motion } from "framer-motion"; //  import animation
 import useAuthStore from "../../Store/useAuthStore";
 
 const Login = () => {
@@ -18,12 +18,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(formData.email, formData.password);
-    navigate("/"); // ✅ redirect after login
+    navigate("/"); //  redirect after login
   };
 
   return (
     <div className="flex justify-center items-center text-black h-screen bg-gray-100">
-      {/* ✅ Animate X-axis entry */}
+      {/* Animate X-axis entry */}
       <motion.div
         initial={{ x: "100vw", opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}

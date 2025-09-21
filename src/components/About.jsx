@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import AboutItems from "./AboutItems";
-import useAuthStore from "/Store/useAuthStore"; // ✅ import store
+import useAuthStore from "/Store/useAuthStore"; // ✅import store
 
 const About = ({ showButton }) => {
-  const [confirmLogout, setConfirmLogout] = useState(false); // ✅ track logout state
-  const logout = useAuthStore((state) => state.logout); // ✅ get logout fn
+  const [confirmLogout, setConfirmLogout] = useState(false); //  track logout state
+  const logout = useAuthStore((state) => state.logout); //  get logout fn
 
   const handleLogoutClick = () => {
     if (!confirmLogout) {
@@ -17,7 +17,7 @@ const About = ({ showButton }) => {
     }
   };
 
-  // ✅ hide confirmation after 5s
+  //  hide confirmation after 5s
   useEffect(() => {
     if (confirmLogout) {
       const timer = setTimeout(() => {

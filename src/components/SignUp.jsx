@@ -2,12 +2,12 @@
 import React, { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // ✅ import animation
+import { motion } from "framer-motion"; //  import animation
 import useAuthStore from "../../Store/useAuthStore";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { register, error, isLoading, loginWithGoogle } = useAuthStore(); // ✅ added loginWithGoogle
+  const { register, error, isLoading, loginWithGoogle } = useAuthStore(); //  added loginWithGoogle
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -34,12 +34,12 @@ const Signup = () => {
     }
 
     await register(formData.email, formData.password, formData.name);
-    navigate("/"); // ✅ redirect after signup
+    navigate("/"); //  redirect after signup
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
-      {/* ✅ Animate X-axis entry */}
+      {/* Animate X-axis entry */}
       <motion.div
         initial={{ x: "-100vw", opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -115,7 +115,7 @@ const Signup = () => {
             {isLoading ? "Creating..." : "Create Account"}
           </button>
 
-          {/* ✅ Google Sign Up Button */}
+          {/*  Google Sign Up Button */}
           <button
             type="button"
             onClick={async () => {

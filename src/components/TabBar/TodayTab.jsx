@@ -610,7 +610,7 @@ const TodayTab = () => {
                     +{Math.round((Number(log.amount) / Number(baseGoal)) * 100)}
                     %
                   </Typography>
-                  {/* ✅ Edit button */}
+                  {/* Edit button */}
                   <IconButton
                     size="small"
                     color="primary"
