@@ -1,10 +1,8 @@
-import { Box, Typography, Grid, Paper, Chip, useTheme } from "@mui/material";
-import { useAppContext } from "../../context/AppContext";
+import { Box, Typography, Grid, Paper, Chip } from "@mui/material";
 import { parseISO, differenceInCalendarDays } from "date-fns";
+import PropTypes from "prop-types";
 
-const AchievementsTab = () => {
-  const { hydrationData, baseGoal, achievements } = useAppContext();
-  const theme = useTheme();
+export default function AchievementsTab({ hydrationData, baseGoal, achievements }) {
 
   const sortedData = [...hydrationData].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
@@ -41,25 +39,28 @@ const AchievementsTab = () => {
       </Typography>
 
       <Grid container spacing={2}>
-        {achievements.map((ach, i) => (
-          <Grid size={{ xs: 6, md: 3 }} key={i}>
+        {achievements.map((ach) => (
+          <Grid size={{ xs: 6, md: 3 }} key={ach.key}>
             <Paper
               elevation={3}
               sx={{
                 p: 2,
                 textAlign: "center",
                 borderRadius: 2,
-                bgcolor: ach.achieved
-                  ? theme.palette.primary.light
-                  : theme.palette.background.paper,
-                color: ach.achieved
-                  ? theme.palette.primary.main
-                  : theme.palette.text.primary,
-                border: `1px solid ${
+                bgcolor: (theme) =>
+                  ach.achieved
+                    ? theme.palette.primary.light
+                    : theme.palette.background.paper,
+                color: (theme) =>
                   ach.achieved
                     ? theme.palette.primary.main
-                    : theme.palette.divider
-                }`,
+                    : theme.palette.text.primary,
+                border: (theme) =>
+                  `1px solid ${
+                    ach.achieved
+                      ? theme.palette.primary.main
+                      : theme.palette.divider
+                  }`,
               }}
             >
               <Box
@@ -67,9 +68,10 @@ const AchievementsTab = () => {
                   mb: 1,
                   display: "flex",
                   justifyContent: "center",
-                  color: ach.achieved
-                    ? theme.palette.primary.main
-                    : theme.palette.grey[400],
+                  color: (theme) =>
+                    ach.achieved
+                      ? theme.palette.primary.main
+                      : theme.palette.grey[400],
                 }}
               >
                 {ach.icon}
@@ -137,11 +139,9 @@ const AchievementsTab = () => {
       </Box>
     </Box>
   );
-};
+}
 
-const Stat = ({ label, value }) => {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
+function Stat({ label, value }) {
 
   return (
     <Box
@@ -149,10 +149,13 @@ const Stat = ({ label, value }) => {
         minWidth: 120,
         p: 2,
         borderRadius: 2,
-        bgcolor: isDark ? theme.palette.background.paper : "#f9f9f9",
+        bgcolor: (theme) =>
+          theme.palette.mode === "dark"
+            ? theme.palette.background.paper
+            : "#f9f9f9",
         textAlign: "center",
-        boxShadow: isDark ? 3 : 2,
-        border: `1px solid ${theme.palette.divider}`,
+        boxShadow: (theme) => (theme.palette.mode === "dark" ? 3 : 2),
+        border: (theme) => `1px solid ${theme.palette.divider}`,
       }}
     >
       <Typography fontWeight="bold" color="text.primary">
@@ -163,6 +166,15 @@ const Stat = ({ label, value }) => {
       </Typography>
     </Box>
   );
+}
+
+Stat.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
-export default AchievementsTab;
+AchievementsTab.propTypes = {
+  hydrationData: PropTypes.array.isRequired,
+  baseGoal: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  achievements: PropTypes.array.isRequired,
+};

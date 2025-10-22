@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { auth } from "../service/firebaseConfig"; // ✅ make sure the path is correct
+import { auth } from "../Service/FirebaseConfig.js"; // ✅ corrected path and casing
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,

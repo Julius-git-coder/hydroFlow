@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import AboutItems from "./AboutItems";
-import useAuthStore from "/Store/useAuthStore"; // ✅import store
+import useAuthStore from "../../Store/useAuthStore"; // ✅import store
+import PropTypes from "prop-types";
 
 const About = ({ showButton }) => {
   const [confirmLogout, setConfirmLogout] = useState(false); //  track logout state
@@ -75,3 +76,7 @@ const About = ({ showButton }) => {
 };
 
 export default About;
+
+About.propTypes = {
+  showButton: PropTypes.func.isRequired,
+};

@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { containers } from "../constants/DrinkSources";
+import PropTypes from "prop-types";
 
 const AddIntakeModal = ({ handleClose }) => {
   const { addLog } = useAppContext();
@@ -184,3 +185,7 @@ const AddIntakeModal = ({ handleClose }) => {
 };
 
 export default AddIntakeModal;
+
+AddIntakeModal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+};

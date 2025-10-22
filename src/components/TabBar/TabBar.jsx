@@ -6,12 +6,14 @@ import InsightsTab from "./InsightsTab";
 import AchievementsTab from "./AchievementsTab";
 import ShareTab from "./ShareTab";
 import CaffeineTab from "./CaffeineTab";
+import { useAppContext } from "../../context/AppContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const TabBar = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const isMobile = useMediaQuery("(max-width:600px)");
   const theme = useTheme();
+  const { hydrationData, baseGoal, achievements } = useAppContext();
 
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -77,7 +79,13 @@ const TabBar = () => {
         {tabIndex === 1 && <HistoryTab />}
         {tabIndex === 2 && <InsightsTab />}
         {tabIndex === 3 && <CaffeineTab />}
-        {tabIndex === 4 && <AchievementsTab />}
+        {tabIndex === 4 && (
+          <AchievementsTab
+            hydrationData={hydrationData}
+            baseGoal={baseGoal}
+            achievements={achievements}
+          />
+        )}
         {tabIndex === 5 && <ShareTab />}
       </Box>
     </div>

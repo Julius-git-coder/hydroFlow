@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { caffeineSources } from "../constants/DrinkSources";
+import PropTypes from "prop-types";
 
 const AddCaffeineModal = ({ handleClose }) => {
   const { addCaffeineLog } = useAppContext();
@@ -210,6 +211,9 @@ const AddCaffeineModal = ({ handleClose }) => {
 };
 
 export default AddCaffeineModal;
+AddCaffeineModal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+};
 // // import {
 // //   Box,
 // //   Button,

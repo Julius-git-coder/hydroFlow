@@ -9,7 +9,7 @@ import WeatherBasedHydration from "./components/WeatherBasedHydration";
 import { useEffect, useState } from "react";
 import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
-import Signup from "./components/Signup";
+import Signup from "./components/SignUp";
 import useAuthStore from "../Store/useAuthStore";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Age from "./components/Age";

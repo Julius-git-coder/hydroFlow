@@ -1,5 +1,6 @@
 // AppContext.js or the context provider code
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import PropTypes from "prop-types";
 import { parseISO, differenceInCalendarDays, isSameDay } from "date-fns";
 import BoltIcon from "@mui/icons-material/Bolt";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
@@ -14,7 +15,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { auth } from "../../Service/firebaseConfig";
+import { auth } from "../../Service/FirebaseConfig.js";
 import {
   getFirestore,
   collection,
@@ -144,7 +145,7 @@ export const AppProvider = ({ children }) => {
       }
     });
     return unsubscribe;
-  }, [isOnline]);
+  }, [isOnline, showWarning]);
   // Utility: get today's net intake
   const getTodayNetIntake = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -972,5 +973,8 @@ export const AppProvider = ({ children }) => {
       </Dialog>
     </AppContext.Provider>
   );
+};
+AppProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 export const useAppContext = () => useContext(AppContext);
