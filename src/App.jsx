@@ -9,7 +9,7 @@ import WeatherBasedHydration from "./components/WeatherBasedHydration";
 import { useEffect, useState } from "react";
 import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
-import Signup from "./components/Signup";
+import SignUp from "./components/SignUp";
 import useAuthStore from "../Store/useAuthStore";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Age from "./components/Age";
@@ -67,7 +67,7 @@ function App() {
     return (
       <div className="flex items-center justify-center h-screen">
         <img
-          src="/Logo.jpeg "
+          src="/Logo.jpeg"
           className="h-20 w-20 rounded-full animate-bounce md:h-30 md:w-30"
         />
       </div>
@@ -120,7 +120,7 @@ function App() {
         <Route path="/Age" element={<Age />} />
         <Route path="/Slider" element={<Slider />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </Box>
   );

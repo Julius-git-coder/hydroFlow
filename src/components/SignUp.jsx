@@ -137,10 +137,9 @@ const Signup = () => {
                 {error}
                 <img
                   src="/eror.jpeg"
-                  className="h-4 w-4  animate-pulse"
+                  className="h-4 w-4 animate-pulse"
                   alt="Error icon"
                 />
-                
               </p>
             </div>
           )}
