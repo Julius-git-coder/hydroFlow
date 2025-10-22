@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import AboutItems from "./AboutItems";
 import useAuthStore from "/Store/useAuthStore"; // ✅import store
@@ -72,6 +73,10 @@ const About = ({ showButton }) => {
       </div>
     </div>
   );
+};
+
+About.propTypes = {
+  showButton: PropTypes.func.isRequired,
 };
 
 export default About;

@@ -1,4 +1,3 @@
-import React from "react";
 // import AboutItemsC from "./AboutItemsC";
 
 const AboutItems = () => {
