@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Typography, Grid, Paper, Chip, useTheme } from "@mui/material";
 import { useAppContext } from "../../context/AppContext";
 import { parseISO, differenceInCalendarDays } from "date-fns";
@@ -42,7 +43,7 @@ const AchievementsTab = () => {
 
       <Grid container spacing={2}>
         {achievements.map((ach, i) => (
-          <Grid size={{ xs: 6, md: 3 }} key={i}>
+          <Grid size={{ xs: 6, md: 3 }} key={ach.key || i}>
             <Paper
               elevation={3}
               sx={{

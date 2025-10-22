@@ -517,7 +517,7 @@ const TodayTab = () => {
   return (
     <Box sx={{ mt: 2 }}>
       <Typography variant="h6" fontWeight="bold">
-        Today's Log
+        Today’s Log
       </Typography>
       <Typography variant="body2" color="text.secondary" gutterBottom>
         Your water intake throughout the day

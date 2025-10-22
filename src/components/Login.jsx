@@ -1,5 +1,5 @@
 // Login.js
-import React, { useState } from "react";
+import { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion"; //  import animation

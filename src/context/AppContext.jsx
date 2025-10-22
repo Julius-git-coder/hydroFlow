@@ -14,7 +14,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { auth } from "../../Service/firebaseConfig";
+import { auth } from "../../Service/FirebaseConfig";
 import {
   getFirestore,
   collection,

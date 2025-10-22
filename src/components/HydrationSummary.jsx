@@ -73,7 +73,7 @@ const HydrationSummary = () => {
         }}
       >
         <Typography variant="h6" fontWeight="bold">
-          Today's Hydration
+          Today’s Hydration
         </Typography>
         <Typography variant="subtitle2" gutterBottom>
           {formattedDate}
