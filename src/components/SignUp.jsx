@@ -1,8 +1,7 @@
 // Signup.js
-import React, { useState } from "react";
+import { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; //  import animation
 import useAuthStore from "../../Store/useAuthStore";
 
 const Signup = () => {
@@ -39,13 +38,7 @@ const Signup = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-black">
-      {/* Animate X-axis entry */}
-      <motion.div
-        initial={{ x: "-100vw", opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-[19rem] md:max-w-[30rem]"
-      >
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-[19rem] md:max-w-[30rem] animate-fade-in">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
         <form onSubmit={handleSubmit} className="space-y-4 ">
           <div className="relative">
@@ -154,7 +147,7 @@ const Signup = () => {
             Sign in
           </button>
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 };

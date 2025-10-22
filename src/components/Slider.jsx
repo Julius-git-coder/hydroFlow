@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext"; // Adjust the import path as needed
 import useAuthStore from "../../Store/useAuthStore"; // Adjust the import path as needed
@@ -295,20 +295,6 @@ const Slider = () => {
       );
     }
     return Math.round(base + adjustment);
-  };
-  const goBack = () => {
-    if (step > 1) {
-      const newStep = step - 1;
-      setStep(newStep);
-      setCurrentIndex(0);
-      if (newStep === 1) {
-        setSelections({ category: "", activity: "", age: "" });
-      } else if (newStep === 2) {
-        setSelections({ ...selections, activity: "", age: "" });
-      } else if (newStep === 3) {
-        setSelections({ ...selections, age: "" });
-      }
-    }
   };
   const resetToGenderSelection = () => {
     setStep(1);

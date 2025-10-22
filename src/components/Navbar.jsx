@@ -4,7 +4,6 @@ import Logo from "/Logo.jpeg";
 import { useState } from "react";
 import Settings from "./Settings";
 import About from "./About";
-import { AnimatePresence, motion } from "framer-motion";
 
 const Navbar = () => {
   const [openSettings, setOpenSettings] = useState(false);
@@ -76,20 +75,12 @@ const Navbar = () => {
         <Settings handleClose={handleCloseSettings} />
       </Modal>
 
-      {/* Animate About on Y-axis */}
-      <AnimatePresence>
-        {show && (
-          <motion.div
-            initial={{ y: "-100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "-100%", opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed inset-0 z-50"
-          >
-            <About showButton={showButton} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* About component */}
+      {show && (
+        <div className="fixed inset-0 z-50">
+          <About showButton={showButton} />
+        </div>
+      )}
     </>
   );
 };
