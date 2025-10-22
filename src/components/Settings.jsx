@@ -14,6 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAppContext } from "../context/AppContext";
+import PropTypes from "prop-types";
 
 const Settings = ({ handleClose }) => {
   const {
@@ -225,6 +226,10 @@ const Settings = ({ handleClose }) => {
       </Typography>
     </Box>
   );
+};
+
+Settings.propTypes = {
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default Settings;

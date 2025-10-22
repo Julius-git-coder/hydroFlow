@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import PropTypes from "prop-types";
 import { useAppContext } from "../context/AppContext";
 import { containers } from "../constants/DrinkSources";
 
@@ -181,6 +182,10 @@ const AddIntakeModal = ({ handleClose }) => {
       </Button>
     </Box>
   );
+};
+
+AddIntakeModal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default AddIntakeModal;
