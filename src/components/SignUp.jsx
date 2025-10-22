@@ -131,15 +131,18 @@ const Signup = () => {
             />
             Continue with Google
           </button>
-
           {error && (
-            <p className="text-red-500 text-xs mt-2 flex">
-              {error}{" "}
-              <img
-                src="/eror.jpeg"
-                className="h-4 w-4 mt-6 relative left-[-12rem] animate-pulse"
-              />
-            </p>
+            <div className="mt-2">
+              <p className="text-red-500 text-xs inline-flex items-center">
+                {error}
+                <img
+                  src="/eror.jpeg"
+                  className="h-4 w-4  animate-pulse"
+                  alt="Error icon"
+                />
+                
+              </p>
+            </div>
           )}
         </form>
         <p className="text-sm text-center mt-4">
