@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import AboutItems from "./AboutItems";
 import useAuthStore from "/Store/useAuthStore"; // ✅import store
